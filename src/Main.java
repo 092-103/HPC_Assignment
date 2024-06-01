@@ -1,38 +1,34 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) throws InterruptedException{
-
-
-
+    public static void main(String[] args) throws InterruptedException {
         System.out.println("Hello and welcome!");
 
-        System.out.printf("Initializing banking system..");
+        System.out.println("Initializing banking system...");
 
-        int totalNumberOfSimulaion = 10;
+        int totalNumberOfSimulations = 10;
         OperationsQueue operationsQueue = new OperationsQueue();
         Bank bank = new Bank("123", operationsQueue);
 
-        System.out.println("Initializing simulation....");
+        System.out.println("Initializing simulation...");
         Thread simulationThread = new Thread(() -> {
-            operationsQueue.addSimulation(totalNumberOfSimulaion);
+            operationsQueue.addSimulation(totalNumberOfSimulations);
         });
-        simulationThread.start(); // Start the simulation
-        simulationThread.join(); // Wait for the simulation to complete
+        simulationThread.start();
+        simulationThread.join();  // Wait for the simulation thread to finish
 
-        System.out.printf("Initializing deposit systen....");
+        System.out.println("Initializing deposit system...");
         Thread depositThread = new Thread(bank::deposit);
         depositThread.start();
-        System.out.println("coompleted");
 
-        System.out.printf("Initializing withdraw systen....");
+        System.out.println("Initializing withdraw system...");
         Thread withdrawThread = new Thread(bank::withdraw);
-
-
         withdrawThread.start();
+
+        // Wait for deposit and withdraw threads to complete
         depositThread.join();
         withdrawThread.join();
-        System.out.println("Simulation completed");
 
+        System.out.println("Completed");
     }
 }
