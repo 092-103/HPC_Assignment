@@ -1,7 +1,7 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException{
 
 
 
@@ -17,25 +17,22 @@ public class Main {
         Thread simulationThread = new Thread(() -> {
             operationsQueue.addSimulation(totalNumberOfSimulaion);
         });
-        simulationThread.start();
-
+        simulationThread.start(); // Start the simulation
+        simulationThread.join(); // Wait for the simulation to complete
 
         System.out.printf("Initializing deposit systen....");
-        Thread depositThread = new Thread(() -> {
-            bank.deposit();
-        });
+        Thread depositThread = new Thread(bank::deposit);
         depositThread.start();
         System.out.println("coompleted");
 
         System.out.printf("Initializing withdraw systen....");
-        Thread withdrawThread = new Thread(() -> {
-            bank.withdraw();
-        });
+        Thread withdrawThread = new Thread(bank::withdraw);
+
+
         withdrawThread.start();
-        System.out.println("coompleted");
-
-
-        System.out.println("coompleted");
+        depositThread.join();
+        withdrawThread.join();
+        System.out.println("Simulation completed");
 
     }
 }
